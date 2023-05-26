@@ -16,7 +16,8 @@ class Store:
         """This code returns the total number of products"""
         total = 0
         for product in self.products:
-            total += product.quantity
+            if product.quantity != "Unlimited":
+                total += product.quantity
         return total
 
     def get_all_products(self):
@@ -24,9 +25,17 @@ class Store:
         product_list = []
         for product in self.products:
             if product.active is True:
-                product_list.append(
-                    [product.name, product.quantity, product.price]
-                )
+                staging_list = [product.name]
+
+                try:
+                    if product.maximum > 0:
+                        staging_list.append(f"Limited to {product.maximum} per order!")
+                        staging_list.append(product.price)
+                except AttributeError:
+                    staging_list.append(product.quantity)
+                    staging_list.append(product.price)
+
+            product_list.append(staging_list)
 
         return product_list
 

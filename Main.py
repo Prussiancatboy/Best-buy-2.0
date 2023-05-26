@@ -27,7 +27,11 @@ class MainMenu:
         blank_str += "------\n"
         for item, stock, price in lst:
             blank_str += \
-                f"{counter}. {item}, Price: {price}, Quantity: {stock}\n"
+                f"{counter}. {item}, Price: ${price}"
+            if isinstance(stock, str) is not True:
+                blank_str += f", Quantity: {stock}\n"
+            else:
+                blank_str += f", {stock}\n"
             counter += 1
         blank_str += "------\n"
         return blank_str
