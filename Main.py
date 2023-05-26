@@ -8,14 +8,15 @@ class MainMenu:
     it allows them to order various goods"""
 
     def __init__(self):
-        self.product_list = \
-            [products.Product
-             ("MacBook Air M2", price=1450, quantity=100),
-             products.Product
-             ("Bose QuietComfort Earbuds", price=250, quantity=500),
-             products.Product
-             ("Google Pixel 7", price=500, quantity=250)
-             ]
+        self.product_list = [
+            products.Product("MacBook Air M2", price=1450, quantity=100),
+            products.Product("Bose QuietComfort Earbuds", price=250,
+                             quantity=500),
+            products.Product("Google Pixel 7", price=500, quantity=250),
+            products.NonStockedProduct("Windows License", price=125),
+            products.LimitedProduct("Shipping", price=10, quantity=250,
+                                    maximum=1)
+            ]
         self.best_buy = store.Store(self.product_list)
 
     def list_interpreter(self):
@@ -26,7 +27,7 @@ class MainMenu:
         blank_str += "------\n"
         for item, stock, price in lst:
             blank_str += \
-                f"{counter}. {item}, $Price: {price}, Stock: {stock}\n"
+                f"{counter}. {item}, Price: {price}, Quantity: {stock}\n"
             counter += 1
         blank_str += "------\n"
         return blank_str
@@ -51,10 +52,20 @@ class MainMenu:
             indexer = product_num - 1
             try:
                 quantity = int(quantity)
-                if quantity <= 0:
-                    raise ValueError("Invalid quantity. Please enter a positive quantity.")
-                elif quantity > self.best_buy.products[indexer].quantity:
-                    raise ValueError(f"Not enough stock, total stock for item is {self.best_buy.products[indexer].quantity}.")
+                actual_stock = self.best_buy.products[indexer].quantity
+                if actual_stock != "Unlimited":
+                    if quantity <= 0:
+                        raise ValueError("Invalid quantity. Please enter a positive quantity.")
+                    elif quantity > actual_stock and actual_stock > 0:
+                        raise ValueError(f"Not enough stock, total stock for item is {self.best_buy.products[indexer].quantity}.")
+
+                try:
+                    if int(quantity) > int(self.best_buy.products[indexer].maximum):
+                        raise ValueError(f"Can't order over {self.best_buy.products[indexer].maximum}")
+                except AttributeError:
+                    pass
+
+
             except ValueError as error:
                 print(str(error))
                 continue

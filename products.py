@@ -40,9 +40,23 @@ class Product:
         if not self.active:
             raise Exception("Product is inactive.")
 
-        if quantity > self.quantity:
-            raise ValueError("Not enough stock.")
+        if self.quantity != "Unlimited":
+            if quantity > self.quantity:
+                raise ValueError("Not enough stock.")
+            self.quantity -= quantity
+            if self.quantity == 0:
+                self.deactivate()
 
-        self.quantity -= quantity
         total = self.price * quantity
         return float(total)
+
+
+class NonStockedProduct(Product):
+    def __init__(self, name, price):
+        super().__init__(name, price, "Unlimited")
+
+
+class LimitedProduct(Product):
+    def __init__(self, name, price, quantity, maximum):
+        super().__init__(name, price, quantity)
+        self.maximum = maximum
