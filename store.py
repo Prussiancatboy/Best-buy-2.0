@@ -1,4 +1,3 @@
-
 class Store:
     """This code deals with all the products, and manages the inventory"""
     def __init__(self, products):
@@ -24,7 +23,6 @@ class Store:
         """This code returns all product names"""
         product_list = []
         staging_list = []
-        counter = 0
         for product in self.products:
             if product.is_active() is True:
                 if product.name not in staging_list:
@@ -32,7 +30,9 @@ class Store:
 
                 try:
                     if product.maximum > 0:
-                        staging_list.append(f"Limited to {product.maximum} per order!")
+                        staging_list.append(
+                            f"Limited to {product.maximum} per order!")
+
                         staging_list.append(product.price)
                 except AttributeError:
                     staging_list.append(product.quantity)
@@ -62,3 +62,9 @@ class Store:
         for product, quantity in shopping_list:
             total_price += product.buy(quantity)
         return float(total_price)
+
+    def find_product_by_name(self, name):
+        """Finds an active product by its name"""
+        for product in self.products:
+            if product.name == name and product.is_active():
+                return product

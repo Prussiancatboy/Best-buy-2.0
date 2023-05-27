@@ -53,6 +53,13 @@ class MainMenu:
     def make_order(self):
         """Takes orders until the user enters an empty text."""
         order_list = []
+        product_list = []
+
+        # This is to assemble the active product list
+        for name in self.best_buy.get_all_products():
+            product = self.best_buy.find_product_by_name(name[0])
+            product_list.append(product)
+
         while True:
             product_num = input("Which product # do you want? ")
             if not product_num:
@@ -61,7 +68,7 @@ class MainMenu:
             try:
                 product_num = int(product_num)
                 if product_num < 1 or \
-                        product_num > len(self.best_buy.products):
+                        product_num > len(product_list):
                     raise ValueError("Invalid product number. "
                                      "Please try again.")
 
@@ -74,22 +81,22 @@ class MainMenu:
 
             try:
                 quantity = int(quantity)
-                actual_stock = self.best_buy.products[indexer].quantity
+                actual_stock = product_list[indexer].quantity
                 if actual_stock != "Unlimited":
                     if quantity <= 0:
                         raise ValueError("Invalid quantity. "
                                          "Please enter a positive quantity.")
 
-                    elif quantity > actual_stock and actual_stock > 0:
+                    elif quantity > actual_stock > 0:
 
                         raise ValueError(f"Not enough stock, "
                                          f"total stock for item is "
-                                         f"{self.best_buy.products[indexer].quantity}.")
+                                         f"{product_list[indexer].quantity}.")
 
                 try:
-                    if int(quantity) > int(self.best_buy.products[indexer].maximum):
+                    if int(quantity) > int(product_list[indexer].maximum):
                         raise ValueError(f"Can't order over "
-                                         f"{self.best_buy.products[indexer].maximum}")
+                                         f"{product_list[indexer].maximum}")
                 except AttributeError:
                     pass
 
@@ -97,7 +104,7 @@ class MainMenu:
                 print(str(error))
                 continue
 
-            product = self.best_buy.products[product_num - 1]
+            product = product_list[product_num - 1]
             order_list.append((product, quantity))
             print("Product added to list!")
 

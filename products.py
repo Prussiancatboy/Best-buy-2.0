@@ -1,28 +1,32 @@
-
-
 class Product:
     """This makes products and does various things like buying, setting stock,
     and checking stock"""
     def __init__(self, name, price, quantity):
-        self.name = name
+        if name != "":
+            self.name = name
+        else:
+            try:
+                raise ValueError("Name cannot be empty")
 
+            except ValueError as error:
+                print(str(error))
+                quit()
         if price > 0:
             self.price = price
         else:
             try:
-                raise ValueError("Invalid price. "
-                                 "Please enter a positive price.")
+                raise ValueError("Invalid price.")
 
             except ValueError as error:
                 print(str(error))
+                quit()
 
         if isinstance(quantity, str) is True or quantity > 0:
             self.quantity = quantity
         else:
             try:
 
-                raise ValueError("Invalid stock quantity. "
-                                 "Please enter a positive quantity.")
+                raise ValueError("Quantity cannot be negative")
             except ValueError as error:
                 print(str(error))
                 quit()
@@ -72,11 +76,9 @@ class Product:
         total = self.price * quantity
 
         try:
-            promotion = \
-                self.promotion.add_promotion(total, self.price, quantity)
-
+            promotion = self.promotion.add_promotion(total, self.price,
+                                                     quantity)
             total = promotion
-
         except AttributeError:
             pass
 
@@ -86,7 +88,7 @@ class Product:
         self.promotion = promotion
 
     def show_promotion(self):
-        print (self.promotion)
+        print(self.promotion)
 
 
 class NonStockedProduct(Product):
