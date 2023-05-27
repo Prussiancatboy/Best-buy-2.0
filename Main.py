@@ -37,23 +37,14 @@ class MainMenu:
         blank_str = ""
         counter = 1
         blank_str += "------\n"
-        for item, stock, price in lst:
+        for item, stock, price, promotion in lst:
             blank_str += \
                 f"{counter}. {item}, Price: ${price}"
             if isinstance(stock, str) is not True:
                 blank_str += f", Quantity: {stock}"
             else:
                 blank_str += f", {stock}"
-
-            # this code list the promotion if it exists,
-            # otherwise it adds a promotions: none
-            try:
-                blank_str += f", Promotion: " \
-                             f"{MainMenu.product_list[counter - 1].promotion.name}"
-
-            except AttributeError:
-                blank_str += ", Promotion: None"
-
+            blank_str += f", Promotion: {promotion}"
             blank_str += f"\n"
             counter += 1
         blank_str += "------\n"

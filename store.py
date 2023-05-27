@@ -37,6 +37,11 @@ class Store:
                 except AttributeError:
                     staging_list.append(product.quantity)
                     staging_list.append(product.price)
+                try:
+                    staging_list.append(product.promotion.name)
+
+                except AttributeError:
+                    staging_list.append("None")
 
             # this code makes sure the list isn't blank,
             # and it also keeps duplicates out

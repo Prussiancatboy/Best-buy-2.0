@@ -77,7 +77,6 @@ class Product:
 
             total = promotion
 
-
         except AttributeError:
             pass
 
@@ -85,6 +84,9 @@ class Product:
 
     def set_promotion(self, promotion):
         self.promotion = promotion
+
+    def show_promotion(self):
+        print (self.promotion)
 
 
 class NonStockedProduct(Product):
