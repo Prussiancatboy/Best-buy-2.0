@@ -1,22 +1,25 @@
-import store
-import products
 from abc import ABC, abstractmethod
 
+
 class Promotions(ABC):
-    pass
+    def __init__(self, name):
+        self.name = name
 
 
 class SecondHalfPrice(Promotions):
-    pass
+    def __init__(self, name):
+        super().__init__(name)
+
 
 class ThirdOneFree(Promotions):
-    pass
-
-class
-
+    def __init__(self, name):
+        super().__init__(name)
 
 
+class PercentDiscount(Promotions):
+    def __init__(self, name, percent):
+        super().__init__(name)
+        self.percentage = percent
 
 
-    third_one_free = promotions.ThirdOneFree("Third One Free!")
-    thirty_percent = promotions.PercentDiscount("30% off!", percent=30)
+

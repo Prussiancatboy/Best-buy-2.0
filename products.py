@@ -51,6 +51,10 @@ class Product:
         return float(total)
 
 
+    def set_promotion(self, promotion):
+        self.promotion = promotion
+
+
 class NonStockedProduct(Product):
     def __init__(self, name, price):
         super().__init__(name, price, "Unlimited")
