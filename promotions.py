@@ -57,4 +57,7 @@ class PercentDiscount(Promotions):
 
     def add_promotion(self, total, price, quantity):
         """This code adds the promotion"""
-        print(self.name)
+        percent = self.percentage / 100
+        result = percent * 250
+        total -= result
+        return total
