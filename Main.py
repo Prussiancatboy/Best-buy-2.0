@@ -2,6 +2,7 @@ import products
 import store
 import promotions
 
+
 class MainMenu:
 
     """This is the main menu for the user,
@@ -29,7 +30,7 @@ class MainMenu:
 
     # to set the store name
     best_buy = store.Store(product_list)
-    print(product_list[0].promotion.name)
+
     def list_interpreter(self):
         """This makes a nice list that can easily be read"""
         lst = self.best_buy.get_all_products()
@@ -40,9 +41,20 @@ class MainMenu:
             blank_str += \
                 f"{counter}. {item}, Price: ${price}"
             if isinstance(stock, str) is not True:
-                blank_str += f", Quantity: {stock}\n"
+                blank_str += f", Quantity: {stock}"
             else:
-                blank_str += f", {stock}\n"
+                blank_str += f", {stock}"
+
+            # this code list the promotion if it exists,
+            # otherwise it adds a promotions: none
+            try:
+                blank_str += f", Promotion: " \
+                             f"{MainMenu.product_list[counter - 1].promotion.name}"
+
+            except AttributeError:
+                blank_str += ", Promotion: None"
+
+            blank_str += f"\n"
             counter += 1
         blank_str += "------\n"
         return blank_str
@@ -57,29 +69,38 @@ class MainMenu:
 
             try:
                 product_num = int(product_num)
-                if product_num < 1 or product_num > len(self.best_buy.products):
-                    raise ValueError("Invalid product number. Please try again.")
+                if product_num < 1 or \
+                        product_num > len(self.best_buy.products):
+                    raise ValueError("Invalid product number. "
+                                     "Please try again.")
+
             except ValueError as error:
                 print(str(error))
                 continue
 
             quantity = input("What amount do you want? ")
             indexer = product_num - 1
+
             try:
                 quantity = int(quantity)
                 actual_stock = self.best_buy.products[indexer].quantity
                 if actual_stock != "Unlimited":
                     if quantity <= 0:
-                        raise ValueError("Invalid quantity. Please enter a positive quantity.")
+                        raise ValueError("Invalid quantity. "
+                                         "Please enter a positive quantity.")
+
                     elif quantity > actual_stock and actual_stock > 0:
-                        raise ValueError(f"Not enough stock, total stock for item is {self.best_buy.products[indexer].quantity}.")
+
+                        raise ValueError(f"Not enough stock, "
+                                         f"total stock for item is "
+                                         f"{self.best_buy.products[indexer].quantity}.")
 
                 try:
                     if int(quantity) > int(self.best_buy.products[indexer].maximum):
-                        raise ValueError(f"Can't order over {self.best_buy.products[indexer].maximum}")
+                        raise ValueError(f"Can't order over "
+                                         f"{self.best_buy.products[indexer].maximum}")
                 except AttributeError:
                     pass
-
 
             except ValueError as error:
                 print(str(error))
@@ -92,7 +113,7 @@ class MainMenu:
         try:
             total_price = self.best_buy.order(order_list)
             formatted_price = f"{total_price:.2f}"
-            print(f"Order made! Total payment: ${formatted_price}")
+            print(f"******\nOrder made! Total payment: ${formatted_price}")
         except ValueError as error:
             print(str(error))
 

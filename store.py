@@ -23,9 +23,12 @@ class Store:
     def get_all_products(self):
         """This code returns all product names"""
         product_list = []
+        staging_list = []
+        counter = 0
         for product in self.products:
-            if product.active is True:
-                staging_list = [product.name]
+            if product.is_active() is True:
+                if product.name not in staging_list:
+                    staging_list = [product.name]
 
                 try:
                     if product.maximum > 0:
@@ -35,7 +38,14 @@ class Store:
                     staging_list.append(product.quantity)
                     staging_list.append(product.price)
 
-            product_list.append(staging_list)
+            # this code makes sure the list isn't blank,
+            # and it also keeps duplicates out
+            counter = 0
+            for lst in staging_list:
+                counter += 1
+                if counter >= 3:
+                    if staging_list not in product_list:
+                        product_list.append(staging_list)
 
         return product_list
 
